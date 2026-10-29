@@ -1,0 +1,39 @@
+﻿name: Auto Release APK
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "*.apk"
+      - "version.json"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read version
+        id: ver
+        run: |
+          echo "VERSION=$(jq -r .versionName version.json)" >> $GITHUB_OUTPUT
+          echo "CODE=$(jq -r .versionCode version.json)" >> $GITHUB_OUTPUT
+
+      - name: Delete old latest release
+        run: |
+          gh release delete latest-release --yes || true
+          git push --delete origin latest-release || true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create new release with APK
+        run: |
+          gh release create latest-release y2mate.apk \
+            --title "v${{ steps.ver.outputs.VERSION }}" \
+            --notes "$(jq -r .changelog version.json)" \
+            --tag latest-release \
+            --latest
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
