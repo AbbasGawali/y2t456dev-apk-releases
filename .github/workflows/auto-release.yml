@@ -1,4 +1,4 @@
-﻿name: Auto Release APK
+name: Auto Release APK
 
 on:
   push:
@@ -19,7 +19,7 @@ jobs:
         id: ver
         run: |
           echo "VERSION=$(jq -r .versionName version.json)" >> $GITHUB_OUTPUT
-          echo "CODE=$(jq -r .versionCode version.json)" >> $GITHUB_OUTPUT
+          echo "CHANGELOG=$(jq -r .changelog version.json)" >> $GITHUB_OUTPUT
 
       - name: Delete old latest release
         run: |
@@ -28,12 +28,11 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create new release with APK
+      - name: Create release with APK
         run: |
           gh release create latest-release y2mate.apk \
             --title "v${{ steps.ver.outputs.VERSION }}" \
-            --notes "$(jq -r .changelog version.json)" \
-            --tag latest-release \
+            --notes "${{ steps.ver.outputs.CHANGELOG }}" \
             --latest
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
