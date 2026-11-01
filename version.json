@@ -1,6 +1,6 @@
-﻿{
-  "versionCode": 1,
-  "versionName": "1.0.0",
-   "changelog": "Initial release. 4K & 8K downloads, VIP zero-ad mode. Fast......",
-  "forceUpdate": false
+{
+  "versionCode": 2,
+  "versionName": "1.0.1",
+  "changelog": "v1.0.1: Google account picker fixed, streamlined phone verification for UPI/Cashfree, uniform Y2Mate CYOU branding, light mode VIP visual contrast improvements, audio extractor bugfix for Instagram/TikTok/Facebook, and 3-minute 5s skippable ads.",
+  "forceUpdate": true
 }
